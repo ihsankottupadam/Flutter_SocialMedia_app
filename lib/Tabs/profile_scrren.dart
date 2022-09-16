@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:math' as math;
 
-import 'package:social_media/database/testDb.dart';
+import 'package:social_media/database/testdb.dart';
+import 'package:social_media/extensions/better_context.dart';
+import 'package:social_media/screens/settings/views/setttings_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -79,7 +81,7 @@ class PostView extends StatelessWidget {
   Widget build(BuildContext context) {
     return GridView.builder(
         padding: const EdgeInsets.only(bottom: 60),
-        physics: ClampingScrollPhysics(),
+        physics: const ClampingScrollPhysics(),
 
         // shrinkWrap: true,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -163,17 +165,30 @@ class ProfileWidget extends StatelessWidget {
                     child: const Icon(Icons.camera_alt),
                   ),
                 ),
-              )
+              ),
+              Positioned(
+                  top: 15,
+                  right: 15,
+                  child: Material(
+                    clipBehavior: Clip.hardEdge,
+                    shape: const CircleBorder(),
+                    color: Colors.transparent,
+                    child: IconButton(
+                        onPressed: () {
+                          context.navigateTo(const SettingsScreen());
+                        },
+                        icon: const Icon(Icons.settings)),
+                  ))
             ],
           ),
         ),
         const SizedBox(height: 20),
-        Text(
+        const Text(
           'Ihsan Kottupdam',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
         TextButton(onPressed: () {}, child: const Text('Edit Profile')),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: const [
@@ -191,7 +206,7 @@ class ProfileWidget extends StatelessWidget {
             )
           ],
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
       ],
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:social_media/widets/story_card.dart';
 
-import '../database/testDb.dart';
+import '../database/testdb.dart';
 import '../models/user_story.dart';
 
 class StoryBar extends StatelessWidget {

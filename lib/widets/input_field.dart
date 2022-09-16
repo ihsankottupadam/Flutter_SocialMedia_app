@@ -37,13 +37,13 @@ class InputField extends StatelessWidget {
           //       width: 2),
           // ),
           border: const OutlineInputBorder(),
-          hintText: hintText,
+          //hintText: hintText,
           labelText: hintText,
           labelStyle: const TextStyle(fontWeight: FontWeight.bold),
           filled: true,
           contentPadding:
               const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-          fillColor: const Color(0xFFE9E9E9)),
+          fillColor: const Color(0xffffffff)),
       validator: validator,
       onChanged: onChanged,
     );
