@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:social_media/screens/settings/providers/settings_provider.dart';
 import 'package:social_media/screens/settings/views/widgets/settings_tile.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -6,6 +8,7 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.read<SettingsProvider>();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -16,7 +19,13 @@ class SettingsScreen extends StatelessWidget {
         ),
       ),
       body: ListView(
-        children: [const SettingsTile(title: 'Logout', icon: Icons.logout)],
+        children: [
+          SettingsTile(
+            title: 'Logout',
+            icon: Icons.logout,
+            onTap: () => provider.logout(context),
+          )
+        ],
       ),
     );
   }

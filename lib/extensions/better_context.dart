@@ -25,6 +25,12 @@ extension BetterNaviation on BuildContext {
 }
 
 extension BetterContext on BuildContext {
+  snackbar({required String message}) {
+    ScaffoldMessenger.of(this).showSnackBar(SnackBar(
+      content: Text(message),
+    ));
+  }
+
   showError({required String message, String? action, Function? onAction}) {
     ScaffoldMessenger.of(this).showSnackBar(SnackBar(
         content: Row(

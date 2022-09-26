@@ -2,12 +2,15 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 
+import '../constants/api_urls.dart';
+import '../functions/api_functions.dart';
+import '../models/usermodel.dart';
 import '../screens/authentication/models/signindata.dart';
 import '../screens/authentication/models/signupdata.dart';
 
 class AuthService {
   BaseOptions baseOptions =
-      BaseOptions(baseUrl: 'https://tailus-api.herokuapp.com/api/v1/auth/');
+      BaseOptions(baseUrl: '${ApiUri.baseUrl}${ApiUri.auth}');
 
   Future<SignUpData> signup(SignUpData signUpData) async {
     try {
@@ -18,40 +21,44 @@ class AuthService {
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
         return SignUpData.fromJson(response.data['userDetails']);
       } else {
-        throw defaultError;
+        throw defaultApiError;
       }
     } catch (e) {
-      return handleError(e);
+      throw handleError(e);
     }
   }
 
-  Future signIn(SignInData signInData) async {
+  Future<User> signIn(SignInData signInData) async {
     try {
       var response = await Dio(baseOptions).post(
         'signin',
         data: signInData.toJson(),
       );
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
-        log(response.toString());
+        log(response.data.toString());
+        return User.fromJson(response.data);
       } else {
-        throw defaultError;
+        throw defaultApiError;
       }
     } catch (e) {
-      handleError(e);
+      log(e.toString());
+      throw handleError(e);
     }
   }
 
-  Future verifyOTP(SignUpData signUpData, String otp) async {
+  Future<User> verifyOTP(SignUpData signUpData, String otp) async {
     try {
       var data = signUpData.toJson();
       data['Otp'] = otp;
       var response = await Dio(baseOptions).post('verifyOtp', data: data);
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
+        log(response.toString());
+        return User.fromJson(response.data);
       } else {
         throw 'OTP verification failed';
       }
     } catch (e) {
-      handleError(e);
+      throw handleError(e);
     }
   }
 
@@ -61,24 +68,10 @@ class AuthService {
           await Dio(baseOptions).post('forgotPassword', data: {"email": email});
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
       } else {
-        throw defaultError;
+        throw defaultApiError;
       }
     } catch (e) {
-      handleError(e);
+      throw handleError(e);
     }
-  }
-
-  String defaultError = 'Something went wrong!';
-  handleError(e) {
-    if (e is DioError) {
-      if (e.message.startsWith('SocketException')) {
-        throw 'Check internet connection';
-      }
-      if (e.response?.data['error'] != null) {
-        throw e.response!.data['error'];
-      }
-      throw defaultError;
-    }
-    throw e.toString();
   }
 }

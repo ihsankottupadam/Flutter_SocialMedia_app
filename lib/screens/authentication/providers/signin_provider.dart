@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:social_media/extensions/better_context.dart';
 import 'package:social_media/extensions/string.dart';
+import 'package:social_media/models/usermodel.dart';
+import 'package:social_media/screens/authentication/providers/auth_provider.dart';
 import 'package:social_media/screens/main_screen.dart';
 
 import '../../../services/auth_service.dart';
@@ -25,13 +28,18 @@ class SignInProvider extends ChangeNotifier {
     AuthService()
         .signIn(signInData)
         .whenComplete(_hideLoading)
-        .then((value) => context.pushReplace(const MainSCreen()))
+        .then((user) => _navigate(context, user))
         .onError((error, _) => context.showError(message: error.toString()));
   }
 
   _hideLoading() {
     isLoading = false;
     notifyListeners();
+  }
+
+  _navigate(BuildContext context, User user) {
+    context.pushReplace(const MainSCreen());
+    context.read<AuthProvider>().saveUser(user);
   }
 
   @override

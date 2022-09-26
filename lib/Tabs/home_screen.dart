@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text('vimo'),
+        title: const Text('Tailus'),
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert))
         ],
@@ -36,13 +36,13 @@ class PostsView extends StatelessWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: 4,
-      itemBuilder: (context, index) => PostCard(post: posts[index]),
+      itemBuilder: (context, index) => PostCardl(post: posts[index]),
     );
   }
 }
 
-class PostCard extends StatelessWidget {
-  const PostCard({Key? key, required this.post}) : super(key: key);
+class PostCardl extends StatelessWidget {
+  const PostCardl({Key? key, required this.post}) : super(key: key);
   final UserStory post;
   @override
   Widget build(BuildContext context) {
