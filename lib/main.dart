@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media/Tabs/feeeds/providers/feeds_provider.dart';
+import 'package:social_media/Tabs/profile/provider/user_profile_provider.dart';
 
 import 'package:social_media/screens/authentication/providers/auth_provider.dart';
 import 'package:social_media/screens/authentication/views/signin_screen.dart';
@@ -23,7 +24,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => SettingsProvider()),
         ChangeNotifierProvider(create: (_) => NewPostProvider()),
-        ChangeNotifierProvider(create: (_) => FeedsProvider())
+        ChangeNotifierProvider(create: (_) => FeedsProvider()),
+        ChangeNotifierProvider(create: (_) => UserProfileProvider())
       ],
       child: const App(),
     );

@@ -1,22 +1,14 @@
-import 'package:dio/dio.dart';
+import 'dart:developer';
+
 import 'package:http_parser/http_parser.dart';
-import 'package:social_media/models/postmodel.dart';
-import 'package:social_media/screens/authentication/providers/auth_provider.dart';
 
-import '../constants/api_urls.dart';
-import '../functions/api_functions.dart';
+import '../models/postmodel.dart';
 import '../screens/post/models/imagepostmodel.dart';
+import 'base_api_service.dart';
 
-class PostService {
-  Dio dio = Dio();
-  PostService() {
-    init();
-  }
-  init() {
-    dio.options.headers['authtoken'] = AuthProvider.currUser!.token;
-    dio.options.baseUrl = '${ApiUri.baseUrl}post';
-  }
-
+class PostService extends BaseApiService {
+  @override
+  String setEndPoint() => '/post';
   Future<String> postImage(ImagePostModel post) async {
     try {
       String fileName = post.file.split('/').last;
@@ -30,23 +22,25 @@ class PostService {
       dio.options.contentType = 'multipart/form-data';
       dio.options.headers['Content-Type'] = 'multipart/form-data';
 
-      var response =
-          await dio.post('${ApiUri.baseUrl}${ApiUri.post}', data: formData);
-      if (response.statusCode! >= 200 && response.statusCode! < 300) {
+      var response = await dio.post('', data: formData);
+      if (response.isOk) {
+        log(response.data['message']);
         return response.data['message'];
       } else {
         throw defaultApiError;
       }
     } catch (e) {
+      log(e.toString());
+
       throw handleError(e);
     }
   }
 
   Future<List<PostModel>> getPosts() async {
     try {
-      final response = await dio.get('/timeline/${AuthProvider.currUser!.id}');
+      final response = await dio.get('/timeline/${currUser!.id}');
 
-      if (response.statusCode! >= 200 && response.statusCode! < 300) {
+      if (response.isOk) {
         return postsFromJson(response.data);
       } else {
         throw defaultApiError;
@@ -58,8 +52,9 @@ class PostService {
 
   Future<void> likePost(String postId) async {
     try {
-      final response = await dio
-          .put('/like/$postId', data: {'userId': AuthProvider.currUser!.id});
+      final response =
+          await dio.put('/like/$postId', data: {'userId': currUser!.id});
+      log(response.data['message']);
     } catch (e) {
       throw handleError(e);
     }

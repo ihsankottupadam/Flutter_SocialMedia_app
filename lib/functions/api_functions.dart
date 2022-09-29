@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 
 handleError(e) {
   if (e is DioError) {
+    log(e.message);
     if (e.response == null) {
       return networkError;
     }
@@ -12,6 +13,7 @@ handleError(e) {
       return networkError;
     }
     if (e.response?.data is Map && e.response!.data['error'] != null) {
+      log(e.response!.data['error']);
       return e.response!.data['error'];
     }
     log(e.response!.data!.toString());

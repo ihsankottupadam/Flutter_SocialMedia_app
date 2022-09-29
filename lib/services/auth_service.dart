@@ -1,24 +1,20 @@
 import 'dart:developer';
 
-import 'package:dio/dio.dart';
-
-import '../constants/api_urls.dart';
-import '../functions/api_functions.dart';
 import '../models/usermodel.dart';
 import '../screens/authentication/models/signindata.dart';
 import '../screens/authentication/models/signupdata.dart';
+import 'base_api_service.dart';
 
-class AuthService {
-  BaseOptions baseOptions =
-      BaseOptions(baseUrl: '${ApiUri.baseUrl}${ApiUri.auth}');
-
+class AuthService extends BaseApiService {
+  @override
+  String setEndPoint() => '/auth';
   Future<SignUpData> signup(SignUpData signUpData) async {
     try {
-      var response = await Dio(baseOptions).post(
-        'signup',
+      var response = await dio.post(
+        '/signup',
         data: signUpData.toJson(),
       );
-      if (response.statusCode! >= 200 && response.statusCode! < 300) {
+      if (response.isOk) {
         return SignUpData.fromJson(response.data['userDetails']);
       } else {
         throw defaultApiError;
@@ -30,11 +26,11 @@ class AuthService {
 
   Future<User> signIn(SignInData signInData) async {
     try {
-      var response = await Dio(baseOptions).post(
-        'signin',
+      var response = await dio.post(
+        '/signin',
         data: signInData.toJson(),
       );
-      if (response.statusCode! >= 200 && response.statusCode! < 300) {
+      if (response.isOk) {
         log(response.data.toString());
         return User.fromJson(response.data);
       } else {
@@ -50,8 +46,8 @@ class AuthService {
     try {
       var data = signUpData.toJson();
       data['Otp'] = otp;
-      var response = await Dio(baseOptions).post('verifyOtp', data: data);
-      if (response.statusCode! >= 200 && response.statusCode! < 300) {
+      var response = await dio.post('/verifyOtp', data: data);
+      if (response.isOk) {
         log(response.toString());
         return User.fromJson(response.data);
       } else {
@@ -64,9 +60,8 @@ class AuthService {
 
   Future forgotPassword(String email) async {
     try {
-      var response =
-          await Dio(baseOptions).post('forgotPassword', data: {"email": email});
-      if (response.statusCode! >= 200 && response.statusCode! < 300) {
+      var response = await dio.post('/forgotPassword', data: {"email": email});
+      if (response.isOk) {
       } else {
         throw defaultApiError;
       }

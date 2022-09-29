@@ -1,23 +1,27 @@
-import 'package:dio/dio.dart';
-import 'package:social_media/functions/api_functions.dart';
+import 'package:social_media/Tabs/profile/model/user_profile_model.dart';
 
-import '../constants/api_urls.dart';
-import '../screens/authentication/providers/auth_provider.dart';
+import 'base_api_service.dart';
 
-class UserService {
-  Dio dio = Dio();
-  UserService() {
-    init();
-  }
-  init() {
-    dio.options.headers['authtoken'] = AuthProvider.currUser!.token;
-    dio.options.baseUrl = '${ApiUri.baseUrl}user';
-  }
-
+class UserService extends BaseApiService {
+  @override
+  String setEndPoint() => '/user';
   Future<bool> followUser(String userId) async {
     try {
       final response = await dio.put('/follow/$userId');
-      return response.statusCode!.statusType == 200;
+      return response.isOk;
+    } catch (e) {
+      throw handleError(e);
+    }
+  }
+
+  Future<UserProfileModel> getUserInfo(String userId) async {
+    try {
+      final response = await dio.put('/$userId');
+      if (response.isOk) {
+        return UserProfileModel.fromJson(response.data);
+      } else {
+        throw defaultApiError;
+      }
     } catch (e) {
       throw handleError(e);
     }

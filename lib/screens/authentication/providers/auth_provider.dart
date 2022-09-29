@@ -43,8 +43,7 @@ class AuthProvider with ChangeNotifier {
 
   deleteUser() async {
     user = null;
-
-    //notifyListeners();
     await storage.deleteAll();
+    notifyListeners();
   }
 }

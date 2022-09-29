@@ -1,11 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:social_media/models/postmodel.dart';
 import 'package:social_media/screens/authentication/providers/auth_provider.dart';
 import 'package:social_media/services/post_service.dart';
 
 class PostCard extends StatelessWidget {
-  const PostCard({Key? key, required this.post}) : super(key: key);
+  PostCard({Key? key, required this.post}) : super(key: key);
   final PostModel post;
+  final transformationController = TransformationController();
   //TODO-change
   final String defaultAvathar =
       'https://www.pngitem.com/pimgs/m/522-5220445_anonymous-profile-grey-person-sticker-glitch-empty-profile.png';
@@ -13,7 +16,6 @@ class PostCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 8,
-      clipBehavior: Clip.hardEdge,
       margin: const EdgeInsets.all(16),
       child: Column(
         children: [
@@ -28,17 +30,27 @@ class PostCard extends StatelessWidget {
             trailing:
                 IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
           ),
-          FadeInImage(
-            placeholder: const AssetImage('assets/images/black_shade.png'),
-            image: NetworkImage(post.image),
-            fit: BoxFit.fitWidth,
-            width: double.infinity,
-            imageErrorBuilder: (conext, _, __) {
-              return Image.asset(
-                'assets/images/black_shade.png',
-                width: double.infinity,
-              );
+          InteractiveViewer(
+            panEnabled: false,
+            minScale: 1,
+            transformationController: transformationController,
+            maxScale: 2.5,
+            onInteractionEnd: (details) {
+              transformationController.value = Matrix4.identity();
             },
+            clipBehavior: Clip.none,
+            child: FadeInImage(
+              placeholder: const AssetImage('assets/images/black_shade.png'),
+              image: NetworkImage(post.image),
+              fit: BoxFit.fitWidth,
+              width: double.infinity,
+              imageErrorBuilder: (conext, _, __) {
+                return Image.asset(
+                  'assets/images/black_shade.png',
+                  width: double.infinity,
+                );
+              },
+            ),
           ),
           // Image.network(
           //   post.image,
@@ -58,7 +70,7 @@ class PostCard extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: Row(
               children: [
-                Text(post.caption),
+                Expanded(child: Text(post.caption)),
               ],
             ),
           )
@@ -112,7 +124,8 @@ class _LikeButtonState extends State<LikeButton> {
     bool isLiked = widget.post.likes.contains(AuthProvider.currUser!.id);
     return GestureDetector(
       onTap: () {
-        PostService().likePost(widget.post.id).onError((error, stackTrace) {
+        PostService().likePost(widget.post.id).onError((error, _) {
+          log('dd', error: error.toString());
           onLike(!isLiked);
         });
         onLike(isLiked);

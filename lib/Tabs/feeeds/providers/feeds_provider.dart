@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media/functions/api_functions.dart';
 import 'package:social_media/models/postmodel.dart';
@@ -21,7 +20,7 @@ class FeedsProvider with ChangeNotifier {
     await PostService()
         .getPosts()
         .whenComplete(() => _hideLoading())
-        .then((postList) => posts = postList.reversed.toList())
+        .then((postList) => posts = postList)
         .catchError((error) => _error('Loadin failed', error, refresh));
     notifyListeners();
   }

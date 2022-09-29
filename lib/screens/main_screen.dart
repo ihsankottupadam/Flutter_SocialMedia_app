@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:social_media/Tabs/feeeds/view/feeds_screen.dart';
+import 'package:social_media/Tabs/profile/view/user_profile_screen.dart';
 import 'package:social_media/extensions/better_context.dart';
 import 'package:social_media/screens/post/View/choose_screen.dart';
 import 'package:social_media/widets/profil_icon.dart';
@@ -21,7 +22,7 @@ class _MainSCreenState extends State<MainSCreen> {
     SearchScreen(),
     SizedBox(),
     MessagesScreen(),
-    ProfileScreen()
+    UserProfileScreen()
   ];
   int currIndex = 0;
   @override

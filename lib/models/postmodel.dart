@@ -33,7 +33,7 @@ class PostModel {
   bool isLiked;
   factory PostModel.fromJson(Map<String, dynamic> json) => PostModel(
         id: json["_id"],
-        userId: json["userId"],
+        userId: 'user', //TODO
         image: json["image"],
         caption: json["caption"],
         hashtags: List<String>.from(json["hashtags"].map((x) => x)),
