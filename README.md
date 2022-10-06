@@ -1,16 +1,34 @@
-# social_media
+# Tailus (social networking app)
+A social media app to share images
 
-A new Flutter project.
+[![made-with-flutter](https://img.shields.io/badge/Made%20with-Flutter-1f425f.svg)](https://flutter.dev/) 
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+## Features
 
-A few resources to get you started if this is your first Flutter project:
+* Custom photo feed 
+ * Post photo posts from camera or gallery
+   * Like posts
+   * Comment on posts
+ * Add stories
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+ * Search for users
+ * Voice and video calls
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+ * Deleting Posts
+ * Profile Pages
+   * Change profile picture
+   * Change username
+   * Follow / Unfollow Users
+   * Add bio
+ * Notifications Feed showing recent likes / comments of posts + new followers
+ * Realtime Messaging and share posts
+
+## Flutter
+ State Management - Provider<br>
+Architecture - MVC
+## Backend
+<a href="https://nodejs.org/en/">  Node.Js</a>
+
+## Author(s)
+Ihsan Kottupadam
