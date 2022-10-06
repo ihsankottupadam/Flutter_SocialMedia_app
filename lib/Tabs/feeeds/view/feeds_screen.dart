@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:social_media/Tabs/feeeds/providers/feeds_provider.dart';
+
 import 'package:social_media/Tabs/feeeds/view/widgets/post_card.dart';
+import 'package:social_media/Tabs/feeeds/view/widgets/suggestion_card.dart';
 import 'package:social_media/screens/post/providers/newpost_provider.dart';
 
 import '../../../widets/storybar.dart';
+import '../providers/feeds_provider.dart';
 
 class FeedsScreen extends StatelessWidget {
   const FeedsScreen({Key? key}) : super(key: key);
@@ -23,9 +25,9 @@ class FeedsScreen extends StatelessWidget {
             Consumer<NewPostProvider>(
               builder: (context, value, _) {
                 if (value.isLoading) {
-                  return LinearProgressIndicator();
+                  return const LinearProgressIndicator();
                 }
-                return SizedBox();
+                return const SizedBox();
               },
             ),
             Consumer<FeedsProvider>(
@@ -37,12 +39,30 @@ class FeedsScreen extends StatelessWidget {
                       child: Center(child: CircularProgressIndicator()));
                 }
                 return ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: value.posts.length,
-                  itemBuilder: (context, index) =>
-                      PostCard(post: value.posts[index]),
-                );
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: value.posts.length,
+                    itemBuilder: (context, index) {
+                      if (value.posts.length ~/ 2 == index &&
+                          value.suggestions.isNotEmpty) {
+                        var sugestions = value.suggestions;
+                        return Column(
+                          children: [
+                            SizedBox(
+                              height: 180,
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: sugestions.length,
+                                  itemBuilder: (context, index) =>
+                                      SuggestionCard(
+                                          userDetails: sugestions[index])),
+                            ),
+                            PostCard(post: value.posts[index])
+                          ],
+                        );
+                      }
+                      return PostCard(post: value.posts[index]);
+                    });
               },
             )
           ],

@@ -8,22 +8,18 @@ class User {
   User({
     required this.token,
     required this.id,
-    required this.email,
+    required this.refreshToken,
   });
 
   final String token;
   final String id;
-  final String email;
+  final String refreshToken;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-        token: json["encryptToken"],
-        id: json["id"],
-        email: json["email"] ?? json["userDetals"]["email"],
-      );
+      token: json["token"],
+      id: json["userDetails"]["_id"],
+      refreshToken: json["refreshToken"]);
 
-  Map<String, dynamic> toJson() => {
-        "token": token,
-        "id": id,
-        "email": email,
-      };
+  Map<String, dynamic> toJson() =>
+      {"token": token, "id": id, "refreshToken": refreshToken};
 }

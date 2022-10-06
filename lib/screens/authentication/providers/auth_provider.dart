@@ -15,14 +15,14 @@ class AuthProvider with ChangeNotifier {
   static User? currUser;
   final storage = const FlutterSecureStorage();
   final String USER_ID = 'user.id';
-  final String USER_EMAIL = 'user.email';
+  final String USER_REFRESH = 'user.refresh';
   final String USER_TOKEN = 'user.token';
 
   saveUser(User user) {
     this.user = AuthProvider.currUser = user;
     storage.write(key: USER_ID, value: user.id);
     storage.write(key: USER_TOKEN, value: user.token);
-    storage.write(key: USER_EMAIL, value: user.email);
+    storage.write(key: USER_REFRESH, value: user.refreshToken);
     log('saved user');
     notifyListeners();
   }
@@ -31,9 +31,10 @@ class AuthProvider with ChangeNotifier {
     Map<String, String> values = await storage.readAll();
     String? id = values[USER_ID];
     String? token = values[USER_TOKEN];
-    String? email = values[USER_EMAIL];
-    if (id != null && email != null && token != null) {
-      user = AuthProvider.currUser = User(token: token, id: id, email: email);
+    String? refresh = values[USER_REFRESH];
+    if (id != null && refresh != null && token != null) {
+      user = AuthProvider.currUser =
+          User(token: token, id: id, refreshToken: refresh);
       notifyListeners();
       log(id);
       log(token);

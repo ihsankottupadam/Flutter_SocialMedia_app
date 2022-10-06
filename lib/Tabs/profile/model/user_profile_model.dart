@@ -1,88 +1,88 @@
-// To parse this JSON data, do
-//
-//     final userProfileModel = userProfileModelFromJson(jsonString);
-
-import 'package:meta/meta.dart';
 import 'dart:convert';
+
+import 'package:provider/provider.dart';
+import 'package:social_media/Tabs/profile/model/userdetails.dart';
+import 'package:social_media/Tabs/profile/provider/user_profile_provider.dart';
+import 'package:social_media/util.dart';
+export 'package:social_media/Tabs/profile/model/userdetails.dart';
 
 UserProfileModel userProfileModelFromJson(String str) =>
     UserProfileModel.fromJson(json.decode(str));
 
-String userProfileModelToJson(UserProfileModel data) =>
-    json.encode(data.toJson());
-
 class UserProfileModel {
   UserProfileModel({
+    required this.userDetails,
+    required this.currentUserPosts,
+  });
+
+  final UserDetails userDetails;
+  final List<CurrentUserPost> currentUserPosts;
+
+  factory UserProfileModel.fromJson(Map<String, dynamic> json) =>
+      UserProfileModel(
+        userDetails: UserDetails.fromJson(json["userDetails"]),
+        currentUserPosts: List<CurrentUserPost>.from(
+            json["currentUserPosts"].map((x) => CurrentUserPost.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "userDetails": userDetails.toJson(),
+        "currentUserPosts":
+            List<dynamic>.from(currentUserPosts.map((x) => x.toJson())),
+      };
+  isFollwing() {
+    Util.context.read<UserProfileProvider>().following.contains(userDetails.id);
+  }
+}
+
+class CurrentUserPost {
+  CurrentUserPost({
     required this.id,
-    required this.username,
-    required this.fullname,
-    required this.email,
-    required this.phoneNumber,
-    required this.avatar,
-    required this.coverPhoto,
-    required this.bio,
-    required this.followers,
-    required this.posts,
-    required this.saved,
-    required this.following,
-    required this.private,
-    required this.blocked,
+    required this.userId,
+    required this.image,
+    required this.caption,
+    required this.hashtags,
+    required this.likes,
+    required this.savedBy,
+    required this.comments,
     required this.createdAt,
     required this.updatedAt,
   });
 
   final String id;
-  final String username;
-  final String fullname;
-  final String email;
-  final int phoneNumber;
-  final String avatar;
-  final String coverPhoto;
-  final String bio;
-  final List<String> followers;
-  final List<dynamic> posts;
-  final List<dynamic> saved;
-  final List<String> following;
-  final bool private;
-  final bool blocked;
+  final String userId;
+  final String image;
+  final String caption;
+  final List<String> hashtags;
+  final List<String> likes;
+  final List<dynamic> savedBy;
+  final List<dynamic> comments;
   final DateTime createdAt;
   final DateTime updatedAt;
 
-  factory UserProfileModel.fromJson(Map<String, dynamic> json) =>
-      UserProfileModel(
+  factory CurrentUserPost.fromJson(Map<String, dynamic> json) =>
+      CurrentUserPost(
         id: json["_id"],
-        username: json["username"],
-        fullname: json["fullname"],
-        email: json["email"],
-        phoneNumber: json["phoneNumber"],
-        avatar: json["avatar"],
-        coverPhoto: json["coverPhoto"],
-        bio: json["bio"],
-        followers: List<String>.from(json["followers"].map((x) => x)),
-        posts: List<dynamic>.from(json["posts"].map((x) => x)),
-        saved: List<dynamic>.from(json["saved"].map((x) => x)),
-        following: List<String>.from(json["following"].map((x) => x)),
-        private: json["private"],
-        blocked: json["blocked"],
+        userId: json["userId"],
+        image: json["image"],
+        caption: json["caption"],
+        hashtags: List<String>.from(json["hashtags"].map((x) => x)),
+        likes: List<String>.from(json["likes"].map((x) => x)),
+        savedBy: List<dynamic>.from(json["savedBy"].map((x) => x)),
+        comments: List<dynamic>.from(json["comments"].map((x) => x)),
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
       );
 
   Map<String, dynamic> toJson() => {
         "_id": id,
-        "username": username,
-        "fullname": fullname,
-        "email": email,
-        "phoneNumber": phoneNumber,
-        "avatar": avatar,
-        "coverPhoto": coverPhoto,
-        "bio": bio,
-        "followers": List<dynamic>.from(followers.map((x) => x)),
-        "posts": List<dynamic>.from(posts.map((x) => x)),
-        "saved": List<dynamic>.from(saved.map((x) => x)),
-        "following": List<dynamic>.from(following.map((x) => x)),
-        "private": private,
-        "blocked": blocked,
+        "userId": userId,
+        "image": image,
+        "caption": caption,
+        "hashtags": List<String>.from(hashtags.map((x) => x)),
+        "likes": List<String>.from(likes.map((x) => x)),
+        "savedBy": List<dynamic>.from(savedBy.map((x) => x)),
+        "comments": List<dynamic>.from(comments.map((x) => x)),
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
       };

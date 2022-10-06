@@ -2,7 +2,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media/helpers/ui_helper.dart';
-import 'package:social_media/screens/authentication/views/forgot_password.dart';
 import 'package:social_media/screens/authentication/views/signup_screen.dart';
 
 import 'package:social_media/widets/input_field.dart';

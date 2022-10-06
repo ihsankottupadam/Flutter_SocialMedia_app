@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 
 import 'package:social_media/extensions/better_context.dart';
 import 'package:social_media/screens/post/View/new_post.dart';
+import 'package:social_media/services/platform_service.dart';
 
 class NewPostChooseScreen extends StatelessWidget {
   const NewPostChooseScreen({Key? key}) : super(key: key);
@@ -39,17 +40,42 @@ class NewPostChooseScreen extends StatelessWidget {
                           _choosePhoto(context, ImageSource.gallery)),
                 ],
               ),
-              Container(
-                width: double.infinity,
-                height: 500,
-                color: Colors.black12,
-              )
-              // ElevatedButton(
-              //     onPressed: () => _choosePhoto(context, ImageSource.camera),
-              //     child: Text('Camera')),
-              // ElevatedButton(
-              //     onPressed: () => _choosePhoto(context, ImageSource.gallery),
-              //     child: Text('Gallery'))
+              FutureBuilder<List<String>>(
+                future: PlatformService().getRecentImages(count: 40),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && snapshot.data != null) {
+                    final images = snapshot.data!;
+                    return GridView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                        ),
+                        itemCount: images.length,
+                        itemBuilder: (context, indext) {
+                          File imageFile = File(images[indext]);
+                          return GestureDetector(
+                            onTap: () {
+                              context.navigateTo(
+                                  NewPostScreen(imageFile: imageFile));
+                            },
+                            child: Image.file(
+                              imageFile,
+                              fit: BoxFit.cover,
+                              filterQuality: FilterQuality.low,
+                              cacheWidth: 300,
+                              width: double.infinity,
+                            ),
+                          );
+                        });
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  }
+                  return const SizedBox();
+                },
+              ),
             ],
           ),
         ),
@@ -59,14 +85,20 @@ class NewPostChooseScreen extends StatelessWidget {
 
   _choosePhoto(BuildContext context, source) async {
     final ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(
-        source: source,
-        preferredCameraDevice: CameraDevice.front,
-        maxWidth: 500);
-
-    if (image == null) return;
-    File imageFile = File(image.path);
-    context.navigateTo(NewPostScreen(imageFile: imageFile));
+    picker
+        .pickImage(
+      source: source,
+      maxHeight: 1080,
+      maxWidth: 1080,
+      imageQuality: 80,
+      preferredCameraDevice: CameraDevice.front,
+    )
+        .then((image) {
+      if (image != null) {
+        File imageFile = File(image.path);
+        context.navigateTo(NewPostScreen(imageFile: imageFile));
+      }
+    });
   }
 }
 

@@ -18,12 +18,13 @@ abstract class BaseApiService {
   void _init() {
     User? user = AuthProvider.currUser;
     if (user != null) {
-      dio.options.headers['authtoken'] = user.token;
+      dio.options.headers['AuthToken'] = user.token;
     }
     dio.options.baseUrl = _baseUrl + setEndPoint();
   }
 
   String handleError(e) {
+    print(e.toString());
     if (e is DioError) {
       if (e.response == null) {
         return networkError;

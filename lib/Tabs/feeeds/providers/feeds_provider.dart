@@ -1,13 +1,14 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:social_media/Tabs/profile/model/userdetails.dart';
 import 'package:social_media/functions/api_functions.dart';
 import 'package:social_media/models/postmodel.dart';
 import 'package:social_media/services/post_service.dart';
+import 'package:social_media/services/user_service.dart';
 import 'package:social_media/util.dart';
 
 class FeedsProvider with ChangeNotifier {
   List<PostModel> posts = [];
+  List<UserDetails> suggestions = [];
   bool isLoading = true;
   late GlobalKey<NavigatorState> navigatorKey;
   init() {
@@ -17,12 +18,17 @@ class FeedsProvider with ChangeNotifier {
   }
 
   Future<void> refresh() async {
+    _loadSugestions();
     await PostService()
         .getPosts()
         .whenComplete(() => _hideLoading())
         .then((postList) => posts = postList)
         .catchError((error) => _error('Loadin failed', error, refresh));
     notifyListeners();
+  }
+
+  void _loadSugestions() async {
+    suggestions = await UserService().getSuggestions();
   }
 
   _error(String head, String e, Future Function() onRetry) {

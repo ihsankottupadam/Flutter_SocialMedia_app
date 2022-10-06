@@ -1,14 +1,19 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:social_media/models/postmodel.dart';
+import 'package:social_media/Tabs/profile/model/user_profile_model.dart';
 import 'package:social_media/screens/authentication/providers/auth_provider.dart';
 import 'package:social_media/services/post_service.dart';
 
-class PostCard extends StatelessWidget {
-  PostCard({Key? key, required this.post}) : super(key: key);
-  final PostModel post;
+import '../../model/userdetails.dart';
+
+class UserPostCard extends StatelessWidget {
+  UserPostCard({Key? key, required this.post, required this.userDetails})
+      : super(key: key);
+  final CurrentUserPost post;
+  final UserDetails userDetails;
   final transformationController = TransformationController();
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -20,9 +25,9 @@ class PostCard extends StatelessWidget {
             leading: CircleAvatar(
                 backgroundColor: Colors.transparent,
                 radius: 15,
-                backgroundImage: NetworkImage(post.avatar)),
+                backgroundImage: NetworkImage(userDetails.avatar)),
             title: Text(
-              post.userName,
+              userDetails.fullname,
               style: const TextStyle(
                   fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis),
             ),
@@ -30,32 +35,15 @@ class PostCard extends StatelessWidget {
                 IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
           ),
           InteractiveViewer(
-            panEnabled: false,
-            minScale: 1,
-            transformationController: transformationController,
-            maxScale: 2.5,
-            onInteractionEnd: (details) {
-              transformationController.value = Matrix4.identity();
-            },
-            clipBehavior: Clip.none,
-            child: FadeInImage(
-              placeholder: const AssetImage('assets/images/black_shade.png'),
-              image: NetworkImage(post.image),
-              fit: BoxFit.fitWidth,
-              width: double.infinity,
-              imageErrorBuilder: (conext, _, __) {
-                return Image.asset(
-                  'assets/images/black_shade.png',
-                  width: double.infinity,
-                );
+              panEnabled: false,
+              minScale: 1,
+              transformationController: transformationController,
+              maxScale: 2.5,
+              onInteractionEnd: (details) {
+                transformationController.value = Matrix4.identity();
               },
-            ),
-          ),
-          // Image.network(
-          //   post.image,
-          //   width: double.infinity,
-          //   fit: BoxFit.fitWidth,
-          // ),
+              clipBehavior: Clip.none,
+              child: Hero(tag: post.id, child: Image.network(post.image))),
           Row(
             children: [
               LikeButton(post: post),
@@ -112,7 +100,7 @@ class LikeButton extends StatefulWidget {
     Key? key,
     required this.post,
   }) : super(key: key);
-  final PostModel post;
+  final CurrentUserPost post;
   @override
   State<LikeButton> createState() => _LikeButtonState();
 }

@@ -1,15 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:social_media/Tabs/profile/model/user_profile_model.dart';
+import 'package:social_media/Tabs/profile/view/user_posts_screen.dart';
+import 'package:social_media/Tabs/profile/view/users_screen.dart';
 import 'package:social_media/extensions/better_context.dart';
 
 import '../../../../screens/settings/views/setttings_screen.dart';
 
 class ProfileWidget extends StatelessWidget {
-  const ProfileWidget({Key? key, required this.heiht}) : super(key: key);
+  const ProfileWidget({
+    Key? key,
+    required this.heiht,
+    required this.postCount,
+    required this.profileInfo,
+  }) : super(key: key);
   final double heiht;
+  final UserProfileModel profileInfo;
+  final int postCount;
 
   @override
   Widget build(BuildContext context) {
     double circHeight = heiht * 2 / 3;
+    UserDetails userDetails = profileInfo.userDetails;
     return Column(
       children: [
         SizedBox(
@@ -30,7 +41,7 @@ class ProfileWidget extends StatelessWidget {
                     decoration: BoxDecoration(
                   gradient: LinearGradient(
                       colors: [
-                        Color(0x00000000),
+                        const Color(0x00000000),
                         Theme.of(context).scaffoldBackgroundColor
                       ],
                       begin: Alignment.topCenter,
@@ -46,8 +57,8 @@ class ProfileWidget extends StatelessWidget {
                   clipBehavior: Clip.hardEdge,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(circHeight),
-                    child: Image.asset(
-                      'assets/images/my_dp.jpeg',
+                    child: Image.network(
+                      userDetails.avatar,
                       width: circHeight,
                       height: circHeight,
                       fit: BoxFit.cover,
@@ -86,26 +97,45 @@ class ProfileWidget extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 20),
-        const Text(
-          'Ihsan Kottupdam',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        Text(
+          userDetails.fullname,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
+        const SizedBox(height: 5),
+        Text(
+          '@${userDetails.username}',
+          style: const TextStyle(
+              color: Colors.black54, fontWeight: FontWeight.bold, fontSize: 15),
         ),
         TextButton(onPressed: () {}, child: const Text('Edit Profile')),
-        const SizedBox(height: 10),
+        const SizedBox(height: 5),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: const [
+          children: [
             ProfileItemCount(
               item: 'Total Post',
-              count: '120',
+              count: '$postCount',
+              onTap: () {
+                context.navigateTo(UserPostsScreen(
+                    posts: profileInfo.currentUserPosts,
+                    userDetails: profileInfo.userDetails,
+                    index: 0));
+              },
             ),
             ProfileItemCount(
               item: 'Followers',
-              count: '5.3 K',
+              count: '${userDetails.followers.length}',
+              onTap: () {
+                context.navigateTo(UsersScreen(
+                    title: 'Followes', users: userDetails.followers));
+              },
             ),
             ProfileItemCount(
               item: 'Following',
-              count: '1.1 K',
+              count: '${userDetails.following.length}',
+              onTap: () {
+                context.navigateTo(UsersScreen(
+                    title: 'Following', users: userDetails.following));
+              },
             )
           ],
         ),
@@ -120,22 +150,32 @@ class ProfileItemCount extends StatelessWidget {
     Key? key,
     required this.item,
     required this.count,
+    this.onTap,
   }) : super(key: key);
   final String item;
   final String count;
+  final VoidCallback? onTap;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          item,
-          style: TextStyle(fontWeight: FontWeight.bold),
+    return Expanded(
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          child: Column(
+            children: [
+              Text(
+                item,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Text(
+                count,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+              )
+            ],
+          ),
         ),
-        Text(
-          count,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
-        )
-      ],
+      ),
     );
   }
 }
