@@ -45,6 +45,7 @@ abstract class BaseApiService {
 
   String defaultApiError = 'Something went wrong!';
   String networkError = 'No connection';
+  static String get neteorkError => 'No connection';
 }
 
 extension ApiInt on int {

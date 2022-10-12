@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:social_media/Tabs/profile/model/userdetails.dart';
-import 'package:social_media/functions/api_functions.dart';
 import 'package:social_media/models/postmodel.dart';
+import 'package:social_media/services/base_api_service.dart';
 import 'package:social_media/services/post_service.dart';
 import 'package:social_media/services/user_service.dart';
 import 'package:social_media/util.dart';
@@ -33,7 +33,7 @@ class FeedsProvider with ChangeNotifier {
 
   _error(String head, String e, Future Function() onRetry) {
     final context = Util.navigatorState.currentContext!;
-    if (e == networkError) {
+    if (e == BaseApiService.neteorkError) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('$head, No Network'),
           action: SnackBarAction(
@@ -49,6 +49,11 @@ class FeedsProvider with ChangeNotifier {
 
   _hideLoading() {
     isLoading = false;
+    notifyListeners();
+  }
+
+  removePostsfromUser(String userId) {
+    posts.removeWhere((post) => post.userId == userId);
     notifyListeners();
   }
 }

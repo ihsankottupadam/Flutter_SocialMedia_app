@@ -52,6 +52,7 @@ class FeedsScreen extends StatelessWidget {
                               height: 180,
                               child: ListView.builder(
                                   scrollDirection: Axis.horizontal,
+                                  physics: const BouncingScrollPhysics(),
                                   itemCount: sugestions.length,
                                   itemBuilder: (context, index) =>
                                       SuggestionCard(

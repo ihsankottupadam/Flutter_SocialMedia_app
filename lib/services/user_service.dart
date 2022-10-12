@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:social_media/Tabs/profile/model/user_profile_model.dart';
@@ -39,6 +40,21 @@ class UserService extends BaseApiService {
   Future<List<UserDetails>> getSuggestions() async {
     try {
       final response = await dio.get('/suggestion/${currUser!.id}');
+      if (response.isOk) {
+        return usersListFromJson(response.data);
+      } else {
+        throw defaultApiError;
+      }
+    } catch (e) {
+      throw handleError(e);
+    }
+  }
+
+  Future<List<UserDetails>> getUsersDetails(List<String> userIds) async {
+    try {
+      final response = await dio.post('/userDetails',
+          data: jsonEncode({"userIds", userIds}));
+      log(response.data.toString());
       if (response.isOk) {
         return usersListFromJson(response.data);
       } else {

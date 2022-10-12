@@ -6,6 +6,7 @@ import 'package:social_media/Tabs/profile/provider/user_profile_provider.dart';
 import 'package:social_media/screens/authentication/providers/auth_provider.dart';
 import 'package:social_media/screens/authentication/views/signin_screen.dart';
 import 'package:social_media/screens/main_screen.dart';
+import 'package:social_media/screens/otherprofile/provider/other_profile_provider.dart';
 import 'package:social_media/screens/post/providers/newpost_provider.dart';
 import 'package:social_media/screens/settings/providers/settings_provider.dart';
 import 'package:social_media/util.dart';
@@ -25,7 +26,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => SettingsProvider()),
         ChangeNotifierProvider(create: (_) => NewPostProvider()),
         ChangeNotifierProvider(create: (_) => FeedsProvider()),
-        ChangeNotifierProvider(create: (_) => UserProfileProvider())
+        ChangeNotifierProvider(create: (_) => UserProfileProvider()),
+        ChangeNotifierProvider(create: (_) => OtherProfileProvider())
       ],
       child: const App(),
     );

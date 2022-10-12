@@ -1,9 +1,12 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+
 import 'package:social_media/models/postmodel.dart';
 import 'package:social_media/screens/authentication/providers/auth_provider.dart';
 import 'package:social_media/services/post_service.dart';
+
+import '../../../../helpers/app_imposrts.dart';
 
 class PostCard extends StatelessWidget {
   PostCard({Key? key, required this.post}) : super(key: key);
@@ -21,10 +24,14 @@ class PostCard extends StatelessWidget {
                 backgroundColor: Colors.transparent,
                 radius: 15,
                 backgroundImage: NetworkImage(post.avatar)),
-            title: Text(
-              post.userName,
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis),
+            title: GestureDetector(
+              onTap: () => navigateToProfile(context, post.userId),
+              child: Text(
+                post.userName,
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    overflow: TextOverflow.ellipsis),
+              ),
             ),
             trailing:
                 IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),

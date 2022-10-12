@@ -59,4 +59,16 @@ class PostService extends BaseApiService {
       throw handleError(e);
     }
   }
+
+  Future reportPost(String postId) async {
+    try {
+      final response = await dio.post('/reportPost/$postId');
+      if (response.isOk) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      throw handleError(e);
+    }
+  }
 }

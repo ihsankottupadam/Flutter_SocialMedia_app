@@ -23,4 +23,9 @@ class UserProfileProvider with ChangeNotifier {
     val ? following.add(userId) : following.remove(userId);
     notifyListeners();
   }
+
+  void reset() {
+    following.clear();
+    profileInfo = null;
+  }
 }
