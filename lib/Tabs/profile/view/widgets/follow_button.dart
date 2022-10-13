@@ -1,6 +1,8 @@
+import 'dart:developer';
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:social_media/Tabs/feeeds/providers/feeds_provider.dart';
 import 'package:social_media/Tabs/profile/provider/user_profile_provider.dart';
 import 'package:social_media/services/user_service.dart';
 import 'package:social_media/util.dart';
@@ -40,12 +42,8 @@ class _FollowButtonState extends State<FollowButton> {
             }
           }).then((followed) {
             widget.onDone?.call(followed);
-            if (!followed) {
-              Util.context
-                  .read<FeedsProvider>()
-                  .removePostsfromUser(widget.userId);
-            }
-            profileProvider.setFollwing(widget.userId, followed);
+
+            profileProvider.setFollowing(widget.userId, followed);
           }).onError((error, _) => Util.showSnackbar(error.toString()));
         },
         style: ElevatedButton.styleFrom(

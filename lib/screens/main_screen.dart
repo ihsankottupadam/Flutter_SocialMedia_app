@@ -2,7 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:social_media/Tabs/feeeds/view/feeds_screen.dart';
+import 'package:social_media/Tabs/profile/provider/user_profile_provider.dart';
 import 'package:social_media/Tabs/profile/view/user_profile_screen.dart';
 import 'package:social_media/extensions/better_context.dart';
 import 'package:social_media/screens/post/View/choose_screen.dart';
@@ -25,6 +27,12 @@ class _MainSCreenState extends State<MainSCreen> {
     UserProfileScreen()
   ];
   int currIndex = 0;
+  @override
+  void initState() {
+    context.read<UserProfileProvider>().refresh(context);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -27,6 +27,11 @@ class FeedsProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void refreshSuggestion() async {
+    suggestions = await UserService().getSuggestions();
+    notifyListeners();
+  }
+
   void _loadSugestions() async {
     suggestions = await UserService().getSuggestions();
   }
@@ -52,8 +57,18 @@ class FeedsProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  removePost(String postId) {
+    posts.removeWhere((post) => post.id == postId);
+    notifyListeners();
+  }
+
   removePostsfromUser(String userId) {
     posts.removeWhere((post) => post.userId == userId);
     notifyListeners();
+  }
+
+  void reset() {
+    posts.clear();
+    suggestions.clear();
   }
 }

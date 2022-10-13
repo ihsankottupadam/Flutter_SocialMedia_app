@@ -109,6 +109,8 @@ class ProfileWidget extends StatelessWidget {
         ),
         TextButton(onPressed: () {}, child: const Text('Edit Profile')),
         const SizedBox(height: 5),
+        Text(userDetails.bio, maxLines: 3),
+        const SizedBox(height: 5),
         Row(
           children: [
             ProfileItemCount(

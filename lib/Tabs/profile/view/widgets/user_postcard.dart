@@ -1,11 +1,14 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:social_media/Tabs/profile/model/user_profile_model.dart';
 import 'package:social_media/screens/authentication/providers/auth_provider.dart';
 import 'package:social_media/services/post_service.dart';
 
-import '../../model/userdetails.dart';
+import '../../../../helpers/helperservice.dart';
+import '../../../../widets/dialog_menu.dart';
+import '../../provider/user_profile_provider.dart';
 
 class UserPostCard extends StatelessWidget {
   UserPostCard({Key? key, required this.post, required this.userDetails})
@@ -31,8 +34,7 @@ class UserPostCard extends StatelessWidget {
               style: const TextStyle(
                   fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis),
             ),
-            trailing:
-                IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
+            trailing: _buildMenu(context),
           ),
           InteractiveViewer(
               panEnabled: false,
@@ -63,6 +65,46 @@ class UserPostCard extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+
+  Widget _buildMenu(BuildContext context) {
+    String curUserId = AuthProvider.currUser!.id;
+    final profileProvider = context.read<UserProfileProvider>();
+    return Consumer<UserProfileProvider>(
+      builder: (context, _, __) {
+        return DialogMenu(items: [
+          if (post.userId == curUserId)
+            DialogMenuItem(
+              icon: Icons.delete,
+              text: 'Delete',
+              onSelect: () {
+                HelperService().deletePost(post.id);
+              },
+            )
+          else
+            DialogMenuItem(
+              icon: profileProvider.isFollowing(post.userId)
+                  ? Icons.person_remove_rounded
+                  : Icons.person_add,
+              text: profileProvider.isFollowing(post.userId)
+                  ? 'Unollow'
+                  : 'Follow',
+              onSelect: () {
+                HelperService.followUser(post.userId);
+              },
+            ),
+          DialogMenuItem(icon: Icons.save_alt, text: 'Save', onSelect: () {}),
+          DialogMenuItem(icon: Icons.share, text: 'Share', onSelect: () {}),
+          if (post.userId != curUserId)
+            DialogMenuItem(
+                icon: Icons.report_rounded,
+                text: 'Report',
+                onSelect: () {
+                  HelperService.reportPost(post.id);
+                })
+        ]);
+      },
     );
   }
 }

@@ -7,8 +7,6 @@ import 'package:social_media/Tabs/profile/view/widgets/follow_button.dart';
 import 'package:social_media/extensions/better_context.dart';
 import 'package:social_media/screens/otherprofile/provider/other_profile_provider.dart';
 
-import '../../../../screens/settings/views/setttings_screen.dart';
-
 class OtherProfileWidget extends StatelessWidget {
   const OtherProfileWidget({
     Key? key,
@@ -91,10 +89,7 @@ class OtherProfileWidget extends StatelessWidget {
                     shape: const CircleBorder(),
                     color: Colors.transparent,
                     child: IconButton(
-                        onPressed: () {
-                          context.navigateTo(const SettingsScreen());
-                        },
-                        icon: const Icon(Icons.settings)),
+                        onPressed: () {}, icon: const Icon(Icons.more_vert)),
                   ))
             ],
           ),
@@ -115,6 +110,8 @@ class OtherProfileWidget extends StatelessWidget {
           userId: userDetails.id,
           onDone: context.read<OtherProfileProvider>().onFollowDone,
         ),
+        const SizedBox(height: 15),
+        Text(userDetails.bio, maxLines: 3),
         const SizedBox(height: 5),
         Row(
           children: [

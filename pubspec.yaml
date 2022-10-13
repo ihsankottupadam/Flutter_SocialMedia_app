@@ -42,7 +42,6 @@ dependencies:
   flutter_secure_storage: ^6.0.0
   image_picker: ^0.8.5+3
   http_parser: ^4.0.1
-  local_image_provider: ^4.2.0
   scrollable_positioned_list: ^0.3.4
   shimmer: ^2.0.0
 

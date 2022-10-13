@@ -60,7 +60,21 @@ class PostService extends BaseApiService {
     }
   }
 
-  Future reportPost(String postId) async {
+  Future<bool> deletePost(String postId) async {
+    try {
+      final response =
+          await dio.delete('/$postId', data: {"userId": currUser!.id});
+      if (response.isOk) {
+        log(response.data.toString());
+        return true;
+      }
+      return false;
+    } catch (e) {
+      throw handleError(e);
+    }
+  }
+
+  Future<bool> reportPost(String postId) async {
     try {
       final response = await dio.post('/reportPost/$postId');
       if (response.isOk) {
